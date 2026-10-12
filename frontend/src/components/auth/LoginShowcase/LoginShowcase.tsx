@@ -1,16 +1,13 @@
 import { FiChevronRight, FiMoreHorizontal } from 'react-icons/fi'
+import { SiIcloud, SiNetflix, SiSpotify, SiYoutube } from 'react-icons/si'
 import LoginMagneticCard from '../LoginMagneticCard/LoginMagneticCard'
 
 const services = [
-  { name: 'Netflix', icon: 'netflix', color: 'e50914', amount: 'R$ 55,90' },
-  { name: 'Spotify', icon: 'spotify', color: '1ed760', amount: 'R$ 34,90' },
-  { name: 'YouTube', icon: 'youtube', color: 'ff0000', amount: 'R$ 24,90' },
-  { name: 'iCloud', icon: 'icloud', color: '3693f3', amount: 'R$ 19,90' },
+  { name: 'Netflix', Icon: SiNetflix, color: '#e50914', amount: 'R$ 55,90' },
+  { name: 'Spotify', Icon: SiSpotify, color: '#1ed760', amount: 'R$ 34,90' },
+  { name: 'YouTube', Icon: SiYoutube, color: '#ff0000', amount: 'R$ 24,90' },
+  { name: 'iCloud', Icon: SiIcloud, color: '#3693f3', amount: 'R$ 19,90' },
 ]
-
-function iconUrl(icon: string, color: string) {
-  return `https://api.iconify.design/simple-icons/${icon}.svg?color=%23${color}`
-}
 
 function LoginShowcase() {
   return (
@@ -43,7 +40,7 @@ function LoginShowcase() {
             <div>
               <p className="text-[11px] font-medium text-[#7f6a5d]">Próxima cobrança</p>
               <div className="mt-3 flex items-center gap-3">
-                <img alt="" className="size-9" src={iconUrl('spotify', '1ed760')} />
+                <SiSpotify aria-hidden="true" className="size-9 shrink-0" style={{ color: '#1ed760' }} />
                 <div>
                   <p className="text-xs font-medium">Spotify <span className="font-normal text-[#9c887a]">· 18 out.</span></p>
                   <p className="mt-1 text-sm font-semibold tabular-nums">R$ 34,90</p>
@@ -96,7 +93,7 @@ function LoginShowcase() {
             {services.map((service) => (
               <div className="flex items-center gap-2.5 py-1.5" key={service.name}>
                 <span className="grid size-7 shrink-0 place-items-center rounded-[9px] bg-white">
-                  <img alt="" className="size-[19px]" loading="eager" src={iconUrl(service.icon, service.color)} />
+                  <service.Icon aria-hidden="true" className="size-[19px]" style={{ color: service.color }} />
                 </span>
                 <span className="min-w-0 flex-1 truncate text-[11px]">{service.name}</span>
                 <span className="text-[10px] font-medium tabular-nums text-[#746052]">{service.amount}</span>

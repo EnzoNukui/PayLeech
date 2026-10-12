@@ -1,9 +1,16 @@
 import type { MouseEvent } from 'react'
 import { motion, useMotionValue, useSpring } from 'motion/react'
+import { SiIcloud, SiNetflix, SiSpotify } from 'react-icons/si'
+
+const brandIcons = {
+  icloud: SiIcloud,
+  netflix: SiNetflix,
+  spotify: SiSpotify,
+}
 
 export type SubscriptionBrand = {
   name: string
-  icon: string
+  icon: keyof typeof brandIcons
   color: string
 }
 
@@ -23,7 +30,7 @@ function SubscriptionBrandIcon({ service, size = 'medium' }: SubscriptionBrandIc
   const pointerY = useMotionValue(0)
   const x = useSpring(pointerX, { stiffness: 220, damping: 18, mass: 0.35 })
   const y = useSpring(pointerY, { stiffness: 220, damping: 18, mass: 0.35 })
-  const iconUrl = `https://api.iconify.design/simple-icons/${service.icon}.svg?color=%23${service.color.replace('#', '')}`
+  const BrandIcon = brandIcons[service.icon]
 
   function handlePointerMove(event: MouseEvent<HTMLDivElement>) {
     const bounds = event.currentTarget.getBoundingClientRect()
@@ -47,14 +54,10 @@ function SubscriptionBrandIcon({ service, size = 'medium' }: SubscriptionBrandIc
       whileHover={{ scale: 1.1, rotate: 3 }}
       whileTap={{ scale: 0.98 }}
     >
-      <img
-        alt=""
+      <BrandIcon
+        aria-hidden="true"
         className={size === 'small' ? 'size-5' : size === 'large' ? 'size-8' : 'size-6'}
-        loading="lazy"
-        onError={(event) => {
-          event.currentTarget.hidden = true
-        }}
-        src={iconUrl}
+        style={{ color: service.color }}
       />
     </motion.div>
   )
