@@ -1,0 +1,15 @@
+export const serviceIconColors: Record<string, string> = {
+  adobe: 'EB1000', adobecreativecloud: 'DA1F26', applemusic: 'FA243C', appletv: '000000', canva: '00C4CC',
+  crunchyroll: 'F47521', deezer: 'FEAA2D', disneyplus: '113CCF', dropbox: '0061FF',
+  googleone: '4285F4', icloud: '3693F3', max: '002BE7', microsoft365: 'D83B01',
+  netflix: 'E50914', primevideo: '00A8E0', spotify: '1DB954', twitch: '9146FF',
+  xbox: '107C10', youtube: 'FF0000', openai: '10A37F', claude: 'D97757',
+  googlegemini: '8E75FF', perplexity: '20B8CD', deepseek: '4D6BFE', githubcopilot: '000000',
+  microsoft: '5E5E5E', playstation: '003791', youtubemusic: 'FF0000', tidal: '000000',
+  mubi: '000000', paramountplus: '0064FF', globoplay: 'FB0234', notion: '000000', todoist: 'E44332',
+  evernote: '00A82D', figma: 'F24E1E', zoom: '2D8CFF', linkedin: '0A66C2', grammarly: '15C39A',
+  googleworkspace: '4285F4', onedrive: '0364B8', pcloud: '4A90E2', nintendoswitch: 'E60012',
+  ea: 'FF4747', discord: '5865F2', midjourney: '000000', cursor: '000000', runway: '000000',
+  amazonkindle: 'FF9900', audible: 'F8991C', duolingo: '58CC02', '1password': '0572EC', nordvpn: '4687FF',
+  revolut: '0075EB',
+}

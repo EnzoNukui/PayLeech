@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+
+  --color-brand-porcelain: #f7f4ef;
+  --color-brand-cocoa: #80634b;
+  --color-brand-espresso: #493527;
+  --color-brand-gold: #f4d98b;
+  --color-canvas: #f7f4ef;
+  --color-surface: #fffdfa;
+  --color-surface-raised: #ffffff;
+  --color-surface-muted: #eee8df;
+  --color-ink: #302820;
+  --color-ink-muted: #81766b;
+  --color-border: #e8e1d8;
+  --color-accent: #80634b;
+  --color-accent-strong: #493527;
+  --color-accent-soft: #efe6d7;
+  --color-success: #42725a;
+  --color-success-soft: #e7f0e9;
+  --color-warning: #9a6a2d;
+  --color-warning-soft: #f6eddf;
+  --color-danger: #a5443d;
+  --color-danger-soft: #f7e9e7;
+
+  --radius-control: 0.75rem;
+  --radius-card: 1.25rem;
+  --radius-panel: 1.75rem;
+  --shadow-card: 0 12px 36px -28px rgb(48 40 32 / 24%);
+}
+
+:root {
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-ink);
+  background: var(--color-canvas);
+}
+
+body {
+  @apply m-0 min-h-dvh bg-canvas font-sans text-ink;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent) 52%, transparent);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--color-ink);
+  background: var(--color-accent-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

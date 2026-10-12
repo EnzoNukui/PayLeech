@@ -1,0 +1,56 @@
+# Pastas locais de identidade visual e referências fora do frontend
+/brand/
+/logos-utilizaveis/
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+!.env.*.example
+**/application-local.properties
+**/application-secret.properties
+*.pem
+*.key
+*.p12
+*.jks
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDEs e editores
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Java, Maven e Gradle
+**/target/
+**/build/
+.gradle/
+hs_err_pid*
+
+# Node, Vite e saídas do frontend
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.vite/
+.vercel/
+*.tsbuildinfo
+*.local
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Logs gerais
+*.log
+logs/

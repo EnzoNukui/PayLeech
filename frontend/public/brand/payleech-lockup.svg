@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title">
+  <title id="title">PayLeech — selected leech P lockup without face</title>
+  <g transform="scale(.703125)">
+    <rect width="256" height="256" rx="58" fill="#80634B"/>
+    <path d="M87 211c2-43 5-91 5-128 0-24 18-39 46-39 34 0 57 19 57 48 0 31-23 48-56 48H99" fill="none" stroke="#F4D98B" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="87" cy="211" r="19" fill="#F4D98B"/>
+    <circle cx="87" cy="211" r="6" fill="#80634B"/>
+  </g>
+  <text x="211" y="110" fill="#4D392C" font-family="Arial, sans-serif" font-size="54" font-weight="600" letter-spacing="-2">PayLeech</text>
+</svg>
