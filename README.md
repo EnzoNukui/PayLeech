@@ -2,7 +2,7 @@
 
 <img src="frontend/public/brand/payleech-horizontal.svg" alt="Logo PayLeech" width="300" />
 
-# PayLeech
+---
 
 **Suas assinaturas, em ordem.**
 
