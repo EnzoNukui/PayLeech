@@ -33,10 +33,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    SecurityContextRepository securityContextRepository,
-                                                   CsrfTokenRepository csrfTokenRepository)
+                                                   CsrfTokenRepository csrfTokenRepository,
+                                                   CorsConfigurationSource corsConfigurationSource)
             throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository))
                 .securityContext(context -> context
                         .securityContextRepository(securityContextRepository))
