@@ -52,7 +52,7 @@ function AppLayout() {
   return (
     <motion.div
       className="relative flex min-h-dvh flex-col bg-canvas"
-      style={isLandingPage ? { backgroundColor: landingBackground } : undefined}
+      style={{ backgroundColor: isLandingPage ? landingBackground : 'var(--color-canvas)' }}
     >
       {isLandingPage && <LandingHeader />}
       {isApplicationPage && <Header />}
