@@ -2,8 +2,6 @@
 
 <img src="frontend/public/brand/payleech-horizontal.svg" alt="Logo PayLeech" width="300" />
 
-# PayLeech
-
 **Suas assinaturas, em ordem.**
 
 Organize serviços recorrentes, acompanhe cobranças e entenda quanto eles representam no seu orçamento.
