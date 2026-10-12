@@ -1,0 +1,11 @@
+.git
+.idea
+.vscode
+brand
+logos-utilizaveis
+backend/target
+backend/.idea
+frontend/node_modules
+frontend/dist
+frontend/.vercel
+**/*.log
