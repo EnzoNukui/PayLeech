@@ -12,6 +12,7 @@ public class LoginRequest {
     private String email;
 
     @NotBlank(message = "A senha é obrigatória.")
+    @Size(max = 72, message = "A senha deve ter no máximo 72 caracteres.")
     private String senha;
 
     public LoginRequest() {
