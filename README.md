@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="frontend/public/brand/payleech-horizontal.svg" alt="Logo PayLeech" width="300" />
+
 # PayLeech
 
 **Suas assinaturas, em ordem.**
@@ -281,6 +283,8 @@ Desenvolvido por **Enzo Nukui**.
 
 <div align="center">
 
-PayLeech — mais clareza para acompanhar o que você assina.
+<img src="frontend/public/brand/payleech-lockup-reverse.png" alt="PayLeech — logo em versão reversa" width="340" />
+
+Mais clareza para acompanhar o que você assina.
 
 </div>
