@@ -18,6 +18,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -124,6 +125,8 @@ public class AssinaturaService {
 
     public Assinatura atualizar(Long id, Assinatura dadosAtualizados, Long usuarioId) {
         Assinatura assinaturaExistente = buscarPorId(id, usuarioId);
+        boolean dataPrimeiraCobrancaAlterada = !Objects.equals(
+                assinaturaExistente.getDataPrimeiraCobranca(), dadosAtualizados.getDataPrimeiraCobranca());
 
         assinaturaExistente.setNome(dadosAtualizados.getNome());
         assinaturaExistente.setValor(dadosAtualizados.getValor());
@@ -138,6 +141,9 @@ public class AssinaturaService {
                 assinaturaAtualizada,
                 usuarioId,
                 RecorrenciaCobranca.proximaData(assinaturaAtualizada, LocalDate.now(clock)));
+        if (dataPrimeiraCobrancaAlterada && assinaturaAtualizada.getStatusAssinatura() == StatusAssinatura.ATIVA) {
+            cobrancaService.reconciliarCobrancaDoCicloAtual(assinaturaAtualizada, usuarioId);
+        }
         return assinaturaAtualizada;
     }
 

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -124,6 +125,45 @@ public class CobrancaService {
         cobrancaRepository.deleteByAssinatura_Codigo(assinaturaId);
     }
 
+    public void reconciliarCobrancaDoCicloAtual(Assinatura assinatura, Long usuarioId) {
+        LocalDate hoje = LocalDate.now(clock);
+        LocalDate dataDoCicloAtual = RecorrenciaCobranca.ultimaDataAte(assinatura, hoje);
+        if (dataDoCicloAtual == null) {
+            return;
+        }
+
+        long cicloAtual = RecorrenciaCobranca.indiceDoCiclo(assinatura, dataDoCicloAtual);
+        List<Cobranca> cobrancasDoCiclo = cobrancaRepository.findAllByAssinatura_Codigo(assinatura.getCodigo())
+                .stream()
+                .filter(cobranca -> RecorrenciaCobranca.indiceDoCiclo(assinatura, cobranca.getDataPrevista()) == cicloAtual)
+                .toList();
+
+        Cobranca cobrancaPrincipal = cobrancasDoCiclo.stream()
+                .filter(cobranca -> cobranca.getStatus() != StatusCobranca.CANCELADA)
+                .filter(cobranca -> cobranca.getDataPrevista().equals(dataDoCicloAtual))
+                .findFirst()
+                .orElseGet(() -> cobrancasDoCiclo.stream()
+                        .filter(cobranca -> cobranca.getStatus() != StatusCobranca.CANCELADA)
+                        .min(Comparator.comparingLong(cobranca -> Math.abs(
+                                cobranca.getDataPrevista().toEpochDay() - dataDoCicloAtual.toEpochDay())))
+                        .orElseGet(() -> criarCobrancaPaga(assinatura, usuarioId, dataDoCicloAtual)));
+
+        cobrancaPrincipal.setAssinatura(assinatura);
+        cobrancaPrincipal.setUsuario(usuarioRepository.getReferenceById(usuarioId));
+        cobrancaPrincipal.setNomeAssinatura(assinatura.getNome());
+        cobrancaPrincipal.setCategoriaNome(assinatura.getCategoria().getNome());
+        cobrancaPrincipal.setDataPrevista(dataDoCicloAtual);
+        cobrancaPrincipal.setValorPrevisto(assinatura.getValor());
+        cobrancaPrincipal.setDataPagamento(dataDoCicloAtual);
+        cobrancaPrincipal.setValorPago(assinatura.getValor());
+        cobrancaPrincipal.setStatus(StatusCobranca.PAGA);
+        cobrancaRepository.save(cobrancaPrincipal);
+
+        cobrancasDoCiclo.stream()
+                .filter(cobranca -> !cobranca.getId().equals(cobrancaPrincipal.getId()))
+                .forEach(cobrancaRepository::delete);
+    }
+
     private void atualizarDadosDaPrevisao(Cobranca cobranca, Assinatura assinatura, LocalDate dataPrevista) {
         cobranca.setAssinatura(assinatura);
         cobranca.setNomeAssinatura(assinatura.getNome());
@@ -172,12 +212,16 @@ public class CobrancaService {
 
     private void materializarHistoricoVencidoAusente(Assinatura assinatura, Long usuarioId, LocalDate hoje) {
         List<Cobranca> cobrancasExistentes = cobrancaRepository.findAllByAssinatura_Codigo(assinatura.getCodigo());
-        Set<LocalDate> datasRegistradas = new HashSet<>();
-        cobrancasExistentes.forEach(cobranca -> datasRegistradas.add(cobranca.getDataPrevista()));
+        Set<Long> ciclosRegistrados = new HashSet<>();
+        cobrancasExistentes.stream()
+                .filter(cobranca -> cobranca.getStatus() != StatusCobranca.CANCELADA)
+                .forEach(cobranca -> ciclosRegistrados.add(
+                        RecorrenciaCobranca.indiceDoCiclo(assinatura, cobranca.getDataPrevista())));
 
         LocalDate dataPrevista = assinatura.getDataPrimeiraCobranca();
         while (!dataPrevista.isAfter(hoje)) {
-            if (datasRegistradas.add(dataPrevista)) {
+            long ciclo = RecorrenciaCobranca.indiceDoCiclo(assinatura, dataPrevista);
+            if (ciclosRegistrados.add(ciclo)) {
                 Cobranca vencida = new Cobranca();
                 vencida.setAssinatura(assinatura);
                 vencida.setUsuario(usuarioRepository.getReferenceById(usuarioId));
@@ -193,5 +237,19 @@ public class CobrancaService {
 
             dataPrevista = RecorrenciaCobranca.dataSeguinte(assinatura, dataPrevista);
         }
+    }
+
+    private Cobranca criarCobrancaPaga(Assinatura assinatura, Long usuarioId, LocalDate dataCobranca) {
+        Cobranca cobranca = new Cobranca();
+        cobranca.setAssinatura(assinatura);
+        cobranca.setUsuario(usuarioRepository.getReferenceById(usuarioId));
+        cobranca.setNomeAssinatura(assinatura.getNome());
+        cobranca.setCategoriaNome(assinatura.getCategoria().getNome());
+        cobranca.setDataPrevista(dataCobranca);
+        cobranca.setValorPrevisto(assinatura.getValor());
+        cobranca.setDataPagamento(dataCobranca);
+        cobranca.setValorPago(assinatura.getValor());
+        cobranca.setStatus(StatusCobranca.PAGA);
+        return cobranca;
     }
 }

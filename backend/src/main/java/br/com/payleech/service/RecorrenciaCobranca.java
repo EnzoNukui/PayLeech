@@ -43,6 +43,38 @@ final class RecorrenciaCobranca {
         return primeiraCobranca.plusMonths(numeroDaProximaCobranca * intervaloMeses);
     }
 
+    static LocalDate ultimaDataAte(Assinatura assinatura, LocalDate referencia) {
+        LocalDate primeiraCobranca = assinatura.getDataPrimeiraCobranca();
+        if (primeiraCobranca.isAfter(referencia)) {
+            return null;
+        }
+
+        int intervaloMeses = mesesPorCobranca(assinatura.getPeriodicidade());
+        long mesesDesdePrimeiraCobranca = ChronoUnit.MONTHS.between(
+                primeiraCobranca.withDayOfMonth(1),
+                referencia.withDayOfMonth(1));
+        long numeroDaCobranca = mesesDesdePrimeiraCobranca / intervaloMeses;
+        LocalDate cobranca = primeiraCobranca.plusMonths(numeroDaCobranca * intervaloMeses);
+
+        while (cobranca.isAfter(referencia)) {
+            numeroDaCobranca--;
+            cobranca = primeiraCobranca.plusMonths(numeroDaCobranca * intervaloMeses);
+        }
+        while (!primeiraCobranca.plusMonths((numeroDaCobranca + 1) * intervaloMeses).isAfter(referencia)) {
+            numeroDaCobranca++;
+            cobranca = primeiraCobranca.plusMonths(numeroDaCobranca * intervaloMeses);
+        }
+
+        return cobranca;
+    }
+
+    static long indiceDoCiclo(Assinatura assinatura, LocalDate dataCobranca) {
+        long mesesDesdePrimeiraCobranca = ChronoUnit.MONTHS.between(
+                assinatura.getDataPrimeiraCobranca().withDayOfMonth(1),
+                dataCobranca.withDayOfMonth(1));
+        return Math.floorDiv(mesesDesdePrimeiraCobranca, mesesPorCobranca(assinatura.getPeriodicidade()));
+    }
+
     static int mesesPorCobranca(Periodicidade periodicidade) {
         return switch (periodicidade) {
             case MENSAL -> 1;
