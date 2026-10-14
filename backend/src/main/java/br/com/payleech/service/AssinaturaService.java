@@ -142,8 +142,16 @@ public class AssinaturaService {
     }
 
     public void excluir(Long id, Long usuarioId) {
+        excluir(id, usuarioId, false);
+    }
+
+    public void excluir(Long id, Long usuarioId, boolean apagarHistorico) {
         Assinatura assinatura = buscarPorId(id, usuarioId);
-        cobrancaService.desvincularDaAssinatura(id);
+        if (apagarHistorico) {
+            cobrancaService.excluirHistoricoDaAssinatura(id);
+        } else {
+            cobrancaService.desvincularDaAssinatura(id);
+        }
         assinaturaRepository.delete(assinatura);
     }
 

@@ -29,8 +29,11 @@ export const assinaturaService = {
     })
   },
 
-  excluir(id: number) {
-    return apiRequest<void>(`/assinaturas/${id}`, { method: 'DELETE' })
+  excluir(id: number, apagarHistorico = false) {
+    const params = new URLSearchParams()
+    if (apagarHistorico) params.set('apagarHistorico', 'true')
+    const query = params.size ? `?${params.toString()}` : ''
+    return apiRequest<void>(`/assinaturas/${id}${query}`, { method: 'DELETE' })
   },
 }
 

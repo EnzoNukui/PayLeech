@@ -22,6 +22,8 @@ public interface CobrancaRepository extends JpaRepository<Cobranca, Long> {
 
     List<Cobranca> findAllByAssinatura_Codigo(Long assinaturaId);
 
+    void deleteByAssinatura_Codigo(Long assinaturaId);
+
     @EntityGraph(attributePaths = "assinatura")
     Optional<Cobranca> findByIdAndUsuario_Id(Long id, Long usuarioId);
 }

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { authService } from '../service/authService'
 import type { CadastroPayload, LoginPayload, Usuario } from '../types/auth'
 import { ApiError } from '../service/apiClient'
@@ -18,29 +18,40 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null)
   const [carregando, setCarregando] = useState(true)
+  const verificacaoSessaoId = useRef(0)
 
   const atualizarSessao = useCallback(async () => {
+    const verificacaoId = ++verificacaoSessaoId.current
     try {
       const atual = await authService.atual()
-      setUsuario(atual)
+      if (verificacaoId === verificacaoSessaoId.current) setUsuario(atual)
       return atual
     } catch (error) {
       if (error instanceof ApiError && error.status !== 401) throw error
-      setUsuario(null)
+      if (verificacaoId === verificacaoSessaoId.current) setUsuario(null)
       return null
     }
   }, [])
 
   useEffect(() => {
     let ativo = true
+    const verificacaoId = ++verificacaoSessaoId.current
     authService.atual()
-      .then((atual) => { if (ativo) setUsuario(atual) })
-      .catch(() => { if (ativo) setUsuario(null) })
-      .finally(() => { if (ativo) setCarregando(false) })
+      .then((atual) => {
+        if (ativo && verificacaoId === verificacaoSessaoId.current) setUsuario(atual)
+      })
+      .catch(() => {
+        if (ativo && verificacaoId === verificacaoSessaoId.current) setUsuario(null)
+      })
+      .finally(() => {
+        if (ativo && verificacaoId === verificacaoSessaoId.current) setCarregando(false)
+      })
     return () => { ativo = false }
   }, [])
 
   const entrar = useCallback(async (payload: LoginPayload) => {
+    verificacaoSessaoId.current += 1
+    setCarregando(false)
     const autenticado = await authService.entrar(payload)
     setUsuario(autenticado)
     return autenticado
@@ -55,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const sair = useCallback(async () => {
+    verificacaoSessaoId.current += 1
     try {
       await authService.sair()
     } finally {

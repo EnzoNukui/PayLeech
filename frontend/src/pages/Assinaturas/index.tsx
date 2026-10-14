@@ -101,8 +101,8 @@ function Assinaturas() {
     await carregarAssinaturas()
   }
 
-  async function excluirAssinatura(assinatura: Assinatura) {
-    await assinaturaService.excluir(assinatura.codigo)
+  async function excluirAssinatura(assinatura: Assinatura, apagarHistorico: boolean) {
+    await assinaturaService.excluir(assinatura.codigo, apagarHistorico)
     setAssinaturaExcluindo(null)
     setCarregandoAssinaturas(true)
     setErroAssinaturas('')

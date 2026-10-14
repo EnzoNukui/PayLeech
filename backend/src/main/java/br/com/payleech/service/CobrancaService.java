@@ -120,6 +120,10 @@ public class CobrancaService {
         cobrancaRepository.saveAll(cobrancas);
     }
 
+    public void excluirHistoricoDaAssinatura(Long assinaturaId) {
+        cobrancaRepository.deleteByAssinatura_Codigo(assinaturaId);
+    }
+
     private void atualizarDadosDaPrevisao(Cobranca cobranca, Assinatura assinatura, LocalDate dataPrevista) {
         cobranca.setAssinatura(assinatura);
         cobranca.setNomeAssinatura(assinatura.getNome());

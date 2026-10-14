@@ -11,8 +11,9 @@ export function ProtectedRoute() {
 }
 
 export function GuestRoute() {
-  const { usuario, carregando } = useAuth()
-  if (carregando) return <LoadingState label="Preparando sua sessão…" />
+  const { usuario } = useAuth()
   if (usuario) return <Navigate replace to="/resumo" />
+  // Keep login and sign-up usable while the session check runs in the background.
+  // Private routes still wait for `carregando` in ProtectedRoute.
   return <Outlet />
 }

@@ -130,15 +130,17 @@ public class AssinaturaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir assinatura",
-            description = "Exclui uma assinatura do usuário autenticado.",
+            description = "Exclui uma assinatura do usuário autenticado. Use apagarHistorico=true para apagar também cobranças pagas e previstas associadas.",
             parameters = @Parameter(name = "X-CSRF-TOKEN", in = ParameterIn.HEADER,
                     description = "Token obtido em GET /auth/csrf.", required = true))
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Assinatura excluída."),
             @ApiResponse(responseCode = "404", description = "Assinatura não encontrada.")
     })
-    public ResponseEntity<Void> excluir(@PathVariable Long id, @AuthenticationPrincipal UsuarioDetails usuario) {
-        assinaturaService.excluir(id, usuario.getId());
+    public ResponseEntity<Void> excluir(@PathVariable Long id,
+                                        @RequestParam(defaultValue = "false") boolean apagarHistorico,
+                                        @AuthenticationPrincipal UsuarioDetails usuario) {
+        assinaturaService.excluir(id, usuario.getId(), apagarHistorico);
         return ResponseEntity.noContent().build();
     }
 
